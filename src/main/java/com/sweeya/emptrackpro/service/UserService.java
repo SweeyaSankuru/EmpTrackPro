@@ -22,4 +22,10 @@ public class UserService {
         logger.info("Fetching all users from the database");
         return userRepository.findAll();
     }
+
+    public Users getUserById(Long id){
+        logger.info("Fetching user from the database");
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
 }

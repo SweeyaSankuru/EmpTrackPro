@@ -9,18 +9,18 @@ public class Users {
     @Id
     private Long id;
 
-    private String userName;
+    private String username;
     private String email;
     private String password;
     private String createdAt;
 
 
     public String getUserName() {
-        return userName;
+        return username;
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
+        this.username = userName;
     }
 
     public Long getId() {
