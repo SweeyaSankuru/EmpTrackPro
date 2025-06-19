@@ -3,6 +3,7 @@ package com.sweeya.emptrackpro.controller;
 import com.sweeya.emptrackpro.dto.UserRequest;
 import com.sweeya.emptrackpro.model.Users;
 import com.sweeya.emptrackpro.service.UserService;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +24,14 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public List<Users> getusers(){
-        logger.info("All the users are displayed received 200 OK");
-        return userService.getAllUsers();
+    public List<Users> getUsers(@RequestParam(required = false) String startsWith) {
+        if (startsWith != null && !startsWith.isBlank()) {
+            logger.info("Users fetched with filter");
+            return userService.getUserWithStartLetter(startsWith);
+        } else {
+            logger.info("Users fetched without filter");
+            return userService.getAllUsers();
+        }
     }
 
     @GetMapping("/{id}")
@@ -39,6 +45,4 @@ public class UserController {
         Users newUser = userService.createUser(userRequest);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
-
-
 }

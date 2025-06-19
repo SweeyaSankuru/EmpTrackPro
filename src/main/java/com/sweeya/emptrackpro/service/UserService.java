@@ -1,6 +1,5 @@
 package com.sweeya.emptrackpro.service;
 
-import com.sweeya.emptrackpro.controller.UserController;
 import com.sweeya.emptrackpro.dto.UserRequest;
 import com.sweeya.emptrackpro.model.Users;
 import com.sweeya.emptrackpro.repository.UserRepository;
@@ -9,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -38,5 +37,21 @@ public class UserService {
         users.setCreatedAt(String.valueOf(System.currentTimeMillis()));
 
         return userRepository.save(users);
+    }
+
+    public List<Users> getUserWithStartLetter(String startsWith) {
+        if (startsWith != null) {
+            String letter = startsWith.toLowerCase();
+            List<Users> allUsers = userRepository.findAll();
+            List<Users> fileteredUsers = new ArrayList<>();
+            for (Users user : allUsers) {
+                String name = user.getUserName();
+                if (name != null && name.toLowerCase().startsWith(letter)) {
+                    fileteredUsers.add(user);
+                }
+            }
+            return fileteredUsers;
+        }
+        return Collections.emptyList();
     }
 }
