@@ -6,6 +6,15 @@ public class UserRequest {
     private String username;
     private String password;
     private String email;
+    private int age;
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
 
     public String getUsername() {
         return username;

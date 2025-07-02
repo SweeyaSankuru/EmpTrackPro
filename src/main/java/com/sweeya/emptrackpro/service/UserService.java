@@ -3,6 +3,7 @@ package com.sweeya.emptrackpro.service;
 import com.sweeya.emptrackpro.dto.UserRequest;
 import com.sweeya.emptrackpro.model.Users;
 import com.sweeya.emptrackpro.repository.UserRepository;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.apache.logging.log4j.LogManager;
@@ -14,6 +15,14 @@ import java.util.*;
 public class UserService {
 
     private static final Logger logger = LogManager.getLogger(UserService.class);
+
+    private static final int CHILD_MAX = 12;
+    private static final int TEEN_MIN = 13;
+    private static final int TEEN_MAX = 19;
+    private static final int ADULT_MIN = 20;
+    private static final int ADULT_MAX = 50;
+    private static final int SENIOR_MIN = 51;
+    private static final int SENIOR_MAX = 100;
 
     @Autowired
     private UserRepository userRepository;
@@ -34,6 +43,7 @@ public class UserService {
         users.setUserName(userRequest.getUsername());
         users.setPassword(userRequest.getPassword());
         users.setEmail(userRequest.getEmail());
+        users.setAge(userRequest.getAge());
         users.setCreatedAt(String.valueOf(System.currentTimeMillis()));
 
         return userRepository.save(users);
@@ -54,4 +64,32 @@ public class UserService {
         }
         return Collections.emptyList();
     }
+
+    public List<Users> getUserByAge(String category) {
+        List<Users> allUsers = userRepository.findAll();
+        List<Users> filteredUsers = new ArrayList<>();
+
+        if (category != null) {
+            for (Users user : allUsers){
+                isInCategory(user, category);
+                filteredUsers.add(user);
+                return filteredUsers;
+            }
+        } else {
+            return Collections.emptyList();
+        }
+        return Collections.emptyList();
+    }
+
+    private boolean isInCategory(Users user, String category) {
+        int age = user.getAge();
+        switch (category.toLowerCase()) {
+            case "child": return age < CHILD_MAX;
+            case "teen": return age >= TEEN_MIN && age <= TEEN_MAX;
+            case "adult": return age >= ADULT_MIN && age <= ADULT_MAX;
+            case "senior": return age >= SENIOR_MIN && age <= SENIOR_MAX;
+            default: return false;
+        }
+    }
+
 }

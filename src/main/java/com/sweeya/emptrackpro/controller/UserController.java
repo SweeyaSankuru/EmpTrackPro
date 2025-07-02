@@ -45,4 +45,16 @@ public class UserController {
         Users newUser = userService.createUser(userRequest);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
+
+//    Categorize Users by Age Group
+    @GetMapping("/category/{category}")
+    public List<Users> getUserByAge(@PathVariable String category){
+        if(category != null && (category.equals("teen") || category.equals("child") || category.equals("adult") || category.equals("senior"))){
+            return userService.getUserByAge(category);
+        }
+        else {
+            logger.info("Pass the correct age group/category");
+        }
+        return userService.getUserByAge(category);
+    }
 }
