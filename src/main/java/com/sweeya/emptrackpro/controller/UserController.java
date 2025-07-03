@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -48,13 +49,14 @@ public class UserController {
 
 //    Categorize Users by Age Group
     @GetMapping("/category/{category}")
-    public List<Users> getUserByAge(@PathVariable String category){
+    public List<Users> getUserByAge(@PathVariable("category") String category){
         if(category != null && (category.equals("teen") || category.equals("child") || category.equals("adult") || category.equals("senior"))){
+            logger.info("Entered the correct place");
             return userService.getUserByAge(category);
         }
         else {
             logger.info("Pass the correct age group/category");
         }
-        return userService.getUserByAge(category);
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid category");
     }
 }

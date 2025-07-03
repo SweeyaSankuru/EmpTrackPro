@@ -71,12 +71,12 @@ public class UserService {
 
         if (category != null) {
             for (Users user : allUsers){
-                isInCategory(user, category);
-                filteredUsers.add(user);
-                return filteredUsers;
+                if (isInCategory(user, category))
+                {
+                    filteredUsers.add(user);
+                }
             }
-        } else {
-            return Collections.emptyList();
+            return filteredUsers;
         }
         return Collections.emptyList();
     }
